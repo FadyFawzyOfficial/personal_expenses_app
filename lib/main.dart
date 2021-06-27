@@ -61,9 +61,17 @@ class MyHomePage extends StatelessWidget {
                           ),
                           child: Text(
                             transaction.amount.toString(),
+                            style: TextStyle(
+                              color: Colors.purple,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(width: 2),
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.purple,
+                            ),
                           ),
                         ),
                         Column(
