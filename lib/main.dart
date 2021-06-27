@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_expenses/widgets/new_transaction.dart';
 import 'package:personal_expenses/widgets/transactions_list.dart';
 
 import 'models/transaction.dart';
@@ -52,30 +53,7 @@ class MyHomePage extends StatelessWidget {
               child: Text('Chart!'),
             ),
           ),
-          Card(
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    controller: titleController,
-                    decoration: InputDecoration(labelText: 'Title'),
-                  ),
-                  TextField(
-                    controller: amountController,
-                    decoration: InputDecoration(labelText: 'Amount'),
-                  ),
-                  FlatButton(
-                    textColor: Colors.purple,
-                    child: Text('Add Transaction'),
-                    onPressed: () => print(titleController.text),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          NewTransaction(),
           TransactionList(transactions),
         ],
       ),
