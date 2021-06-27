@@ -60,7 +60,7 @@ class MyHomePage extends StatelessWidget {
                             horizontal: 15,
                           ),
                           child: Text(
-                            transaction.amount.toString(),
+                            '\$${transaction.amount}',
                             style: TextStyle(
                               color: Colors.purple,
                               fontSize: 20,
@@ -86,7 +86,7 @@ class MyHomePage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              transaction.date.toString(),
+                              '${transaction.date}',
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
