@@ -26,7 +26,12 @@ class TransactionList extends StatelessWidget {
                     horizontal: 15,
                   ),
                   child: Text(
-                    '\$${transaction.amount}',
+                    // Use toStringAsFixed() and the define how many decimal
+                    // places you wanna show for example 2.
+                    // No matter if you only entered one or none or if you
+                    // possibly entered a lot, then you see this gets rounded.
+                    // 9.99999 => 10.00
+                    '\$${transaction.amount.toStringAsFixed(2)}',
                     style: TextStyle(
                       color: Colors.purple,
                       fontSize: 20,
