@@ -13,7 +13,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
-  void submitTransaction() {
+  void _submitTransaction() {
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
 
@@ -23,6 +23,8 @@ class _NewTransactionState extends State<NewTransaction> {
       enteredTitle,
       enteredAmount,
     );
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -37,18 +39,18 @@ class _NewTransactionState extends State<NewTransaction> {
             TextField(
               controller: titleController,
               decoration: InputDecoration(labelText: 'Title'),
-              onSubmitted: (_) => submitTransaction(),
+              onSubmitted: (_) => _submitTransaction(),
             ),
             TextField(
               controller: amountController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: 'Amount'),
-              onSubmitted: (_) => submitTransaction(),
+              onSubmitted: (_) => _submitTransaction(),
             ),
             FlatButton(
               textColor: Colors.purple,
               child: Text('Add Transaction'),
-              onPressed: submitTransaction,
+              onPressed: _submitTransaction,
             ),
           ],
         ),
