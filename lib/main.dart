@@ -16,6 +16,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
         fontFamily: 'Quicksand',
+        // Setup my own textTheme
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontFamily: 'OpenSans',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
         // Define an AppBar's text font family
         appBarTheme: AppBarTheme(
           // Assign a new text theme for our app bar so that all text elements
