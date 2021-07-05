@@ -27,22 +27,32 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactionValues);
     return Card(
       elevation: 6,
       margin: const EdgeInsets.all(16),
-      child: Row(
-        children: groupedTransactionValues
-            .map(
-              (transaction) => ChartBar(
-                transaction['day'],
-                transaction['amount'],
-                totalSpending == 0.0
-                    ? 0.0
-                    : (transaction['amount'] as double) / totalSpending,
-              ),
-            )
-            .toList(),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: groupedTransactionValues
+              .map(
+                (transaction) => Flexible(
+                  // With FlexFit.tight we then ensure that the child also can't
+                  // grow because by default every child has the same space but
+                  // child can grow and take some space away from other children
+                  // if they need to. With tight, we force a child its assigned
+                  // width or into its assigned size and it can't grow
+                  fit: FlexFit.tight,
+                  child: ChartBar(
+                    transaction['day'],
+                    transaction['amount'],
+                    totalSpending == 0.0
+                        ? 0.0
+                        : (transaction['amount'] as double) / totalSpending,
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
