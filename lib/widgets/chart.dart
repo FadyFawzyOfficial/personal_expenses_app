@@ -20,7 +20,7 @@ class Chart extends StatelessWidget {
             totalSum += recentTransactions[i].amount;
 
         return {'day': DateFormat.E().format(weekDay)[0], 'amount': totalSum};
-      });
+      }).reversed.toList();
 
   double get totalSpending => groupedTransactionValues.fold(
       0.0, (previousValue, element) => previousValue + element['amount']);

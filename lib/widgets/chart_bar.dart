@@ -11,8 +11,15 @@ class ChartBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FittedBox(
-          child: Text('\$${spendingAmount.toStringAsFixed(0)}'),
+        Container(
+          // Now the text here at the top will always have a height of 24.
+          // No matter how much height it needs and therefore the text (at the top)
+          // is now aligned , the bars are aligned and the text at the bottom is alos
+          // aligned. And that of course looks better than bars jumping randomly around.
+          height: 24,
+          child: FittedBox(
+            child: Text('\$${spendingAmount.toStringAsFixed(0)}'),
+          ),
         ),
         SizedBox(height: 4),
         Container(
@@ -40,7 +47,7 @@ class ChartBar extends StatelessWidget {
           ),
         ),
         SizedBox(height: 4),
-        Text(label),
+        Container(child: Text(label)),
       ],
     );
   }
