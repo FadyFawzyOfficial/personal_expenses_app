@@ -47,8 +47,25 @@ class _NewTransactionState extends State<NewTransaction> {
               decoration: InputDecoration(labelText: 'Amount'),
               onSubmitted: (_) => _submitTransaction(),
             ),
-            FlatButton(
-              textColor: Colors.purple,
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Text('No Date Chosen!'),
+                FlatButton(
+                  textColor: Theme.of(context).primaryColor,
+                  child: Text(
+                    'Choose Date',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+            RaisedButton(
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).textTheme.button.color,
               child: Text('Add Transaction'),
               onPressed: _submitTransaction,
             ),
