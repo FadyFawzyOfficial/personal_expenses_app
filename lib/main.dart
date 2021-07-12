@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 appBar.preferredSize.height -
                                 // The height of the system status bar.
                                 MediaQuery.of(context).padding.top) *
-                        0.3,
+                        0.7,
                     child: Chart(_recentTransactions),
                   )
                 : Container(
