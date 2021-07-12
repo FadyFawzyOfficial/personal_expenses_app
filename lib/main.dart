@@ -115,6 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     // Because of declaring the appBar as a final variable here, I can no access
     // anywhere since it's stored in that variable, has information about the
     // height of the appBar.
@@ -127,42 +129,58 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+
+    final transactionListContainer = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+      child: TransactionList(_userTransactions, _deleteTransaction),
+    );
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Show Chart'),
-                Switch(
-                  value: _showChart,
-                  onChanged: (value) => setState(() => _showChart = value),
-                )
-              ],
-            ),
-            _showChart
-                ? Container(
-                    height: (
-                            // The full height of the device screen.
-                            MediaQuery.of(context).size.height -
-                                // The height of the appBar.
-                                appBar.preferredSize.height -
-                                // The height of the system status bar.
-                                MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child: Chart(_recentTransactions),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) => setState(() => _showChart = value),
                   )
-                : Container(
-                    height: (MediaQuery.of(context).size.height -
+                ],
+              ),
+            if (!isLandscape)
+              Container(
+                height: (
+                        // The full height of the device screen.
+                        MediaQuery.of(context).size.height -
+                            // The height of the appBar.
                             appBar.preferredSize.height -
+                            // The height of the system status bar.
                             MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child:
-                        TransactionList(_userTransactions, _deleteTransaction),
-                  ),
+                    0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandscape) transactionListContainer,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (
+                              // The full height of the device screen.
+                              MediaQuery.of(context).size.height -
+                                  // The height of the appBar.
+                                  appBar.preferredSize.height -
+                                  // The height of the system status bar.
+                                  MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionListContainer,
           ],
         ),
       ),
