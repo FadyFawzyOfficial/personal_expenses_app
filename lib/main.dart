@@ -117,8 +117,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
     // Because of declaring the appBar as a final variable here, I can no access
     // anywhere since it's stored in that variable, has information about the
     // height of the appBar.
@@ -133,9 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final transactionListContainer = Container(
-      height: (MediaQuery.of(context).size.height -
+      height: (mediaQuery.size.height -
               appBar.preferredSize.height -
-              MediaQuery.of(context).padding.top) *
+              mediaQuery.padding.top) *
           0.7,
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
@@ -160,11 +160,11 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 height: (
                         // The full height of the device screen.
-                        MediaQuery.of(context).size.height -
+                        mediaQuery.size.height -
                             // The height of the appBar.
                             appBar.preferredSize.height -
                             // The height of the system status bar.
-                            MediaQuery.of(context).padding.top) *
+                            mediaQuery.padding.top) *
                     0.3,
                 child: Chart(_recentTransactions),
               ),
@@ -174,11 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? Container(
                       height: (
                               // The full height of the device screen.
-                              MediaQuery.of(context).size.height -
+                              mediaQuery.size.height -
                                   // The height of the appBar.
                                   appBar.preferredSize.height -
                                   // The height of the system status bar.
-                                  MediaQuery.of(context).padding.top) *
+                                  mediaQuery.padding.top) *
                           0.7,
                       child: Chart(_recentTransactions),
                     )
