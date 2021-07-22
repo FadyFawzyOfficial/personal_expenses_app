@@ -48,6 +48,8 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
+    // SingleChildScrollView to prevent the modal bottom sheet from taking
+    // the whole screen hight and causing BOTTOM OVERFLOWED BY *** PIXELS
     return SingleChildScrollView(
       child: Card(
         elevation: 5,

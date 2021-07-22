@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'models/transaction.dart';
 import 'widgets/new_transaction.dart';
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           // Assign a new text theme for our app bar so that all text elements
           // in the app bar received that theme, and we based it on the default
-          // text theme so that we don't have to override everyting like font
+          // text theme so that we don't have to override everything like font
           // size and so on. But we use the default text theme and copy that with
           // some new overwritten values. We don't overwrite all text in there,
           // but text, which is marked as a title
@@ -109,6 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      // this will allow the bottom sheet to take the full required height which
+      // gives more insurance that TextField is not covered by the keyboard.
+      isScrollControlled: true,
       builder: (_) => NewTransaction(_addNewTransaction),
     );
   }
