@@ -11,10 +11,9 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 575,
-      child: transactions.isEmpty
-          ? Column(
+    return transactions.isEmpty
+        ? LayoutBuilder(
+            builder: (context, constraints) => Column(
               children: [
                 Text(
                   'No transactions added yet!',
@@ -22,54 +21,63 @@ class TransactionList extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Container(
-                  height: 200,
+                  height: constraints.maxHeight * 0.6,
                   child: Image.asset(
                     'assets/images/waiting.png',
                     fit: BoxFit.cover,
                   ),
                 ),
               ],
-            )
-          : ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                Transaction transaction = transactions[index];
-                return Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 4,
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 36,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: FittedBox(
-                          child: Text(
-                            '\$${transaction.amount.toStringAsFixed(2)}',
-                          ),
+            ),
+          )
+        : ListView.builder(
+            itemCount: transactions.length,
+            itemBuilder: (context, index) {
+              Transaction transaction = transactions[index];
+              return Card(
+                elevation: 5,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 4,
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 36,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FittedBox(
+                        child: Text(
+                          '\$${transaction.amount.toStringAsFixed(2)}',
                         ),
                       ),
                     ),
-                    title: Text(
-                      transaction.title,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format(transaction.date),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.delete_rounded,
-                        color: Theme.of(context).errorColor,
-                      ),
-                      onPressed: () => deleteTransaction(transaction.id),
-                    ),
                   ),
-                );
-              },
-            ),
-    );
+                  title: Text(
+                    transaction.title,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  subtitle: Text(
+                    DateFormat.yMMMd().format(transaction.date),
+                  ),
+                  // When we have more width, I want to show a button with a text
+                  // next to it.
+                  trailing: MediaQuery.of(context).size.width > 450
+                      ? FlatButton.icon(
+                          icon: Icon(Icons.delete_rounded),
+                          label: Text('Delete'),
+                          textColor: Theme.of(context).errorColor,
+                          onPressed: () => deleteTransaction(transaction.id),
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.delete_rounded,
+                            color: Theme.of(context).errorColor,
+                          ),
+                          onPressed: () => deleteTransaction(transaction.id),
+                        ),
+                ),
+              );
+            },
+          );
   }
 }

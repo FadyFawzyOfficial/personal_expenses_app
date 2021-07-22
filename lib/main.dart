@@ -5,7 +5,15 @@ import 'widgets/new_transaction.dart';
 import 'widgets/transactions_list.dart';
 import 'widgets/chart.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // // Force the app to be view into portrait mode
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -24,13 +32,15 @@ class MyApp extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
-              button: TextStyle(color: Colors.white),
+              button: TextStyle(
+                color: Colors.white,
+              ),
             ),
         // Define an AppBar's text font family
         appBarTheme: AppBarTheme(
           // Assign a new text theme for our app bar so that all text elements
           // in the app bar received that theme, and we based it on the default
-          // text theme so that we don't have to override everyting like font
+          // text theme so that we don't have to override everything like font
           // size and so on. But we use the default text theme and copy that with
           // some new overwritten values. We don't overwrite all text in there,
           // but text, which is marked as a title
@@ -55,19 +65,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    // Transaction(
-    //   id: 't1',
-    //   title: 'New Shoes',
-    //   amount: 99.99,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Weekly Groceries',
-    //   amount: 80.00,
-    //   date: DateTime.now(),
-    // ),
+    Transaction(
+      id: 't1',
+      title: 'New Shoes',
+      amount: 99.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Weekly Groceries',
+      amount: 80.00,
+      date: DateTime.now(),
+    ),
   ];
+
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions => _userTransactions
       .where(
@@ -96,28 +108,81 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      // this will allow the bottom sheet to take the full required height which
+      // gives more insurance that TextField is not covered by the keyboard.
+      isScrollControlled: true,
       builder: (_) => NewTransaction(_addNewTransaction),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    // Because of declaring the appBar as a final variable here, I can no access
+    // anywhere since it's stored in that variable, has information about the
+    // height of the appBar.
+    final appBar = AppBar(
+      title: Text('Personal Expenses'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+
+    final transactionListContainer = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TransactionList(_userTransactions, _deleteTransaction),
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Expenses'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          ),
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions, _deleteTransaction),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) => setState(() => _showChart = value),
+                  )
+                ],
+              ),
+            if (!isLandscape)
+              Container(
+                height: (
+                        // The full height of the device screen.
+                        mediaQuery.size.height -
+                            // The height of the appBar.
+                            appBar.preferredSize.height -
+                            // The height of the system status bar.
+                            mediaQuery.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandscape) transactionListContainer,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (
+                              // The full height of the device screen.
+                              mediaQuery.size.height -
+                                  // The height of the appBar.
+                                  appBar.preferredSize.height -
+                                  // The height of the system status bar.
+                                  mediaQuery.padding.top) *
+                          0.7,
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionListContainer,
           ],
         ),
       ),
