@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'models/transaction.dart';
@@ -124,15 +125,31 @@ class _MyHomePageState extends State<MyHomePage> {
     // Because of declaring the appBar as a final variable here, I can no access
     // anywhere since it's stored in that variable, has information about the
     // height of the appBar.
-    final appBar = AppBar(
-      title: Text('Personal Expenses'),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _startAddNewTransaction(context),
-        ),
-      ],
-    );
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Personal Expenses'),
+            trailing: Row(
+              // MainAxisSize. By default, it takes all the width it can get as
+              // a row (same for the column), the the row will shrink along its
+              // main axis,to be only as big as its children need to be.
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _startAddNewTransaction(context),
+                ),
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text('Personal Expenses'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _startAddNewTransaction(context),
+              ),
+            ],
+          );
 
     final transactionListContainer = Container(
       height: (mediaQuery.size.height -
@@ -141,65 +158,74 @@ class _MyHomePageState extends State<MyHomePage> {
           0.7,
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Show Chart'),
-                  // the adaptive constructor takes the same configuration as the
-                  // normal Switch but the difference here is that is automatically
-                  // adjusts the look based on the platform.
-                  Switch.adaptive(
-                    // You might want to keep the general color theme.
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (value) => setState(() => _showChart = value),
-                  )
-                ],
-              ),
-            if (!isLandscape)
-              Container(
-                height: (
-                        // The full height of the device screen.
-                        mediaQuery.size.height -
-                            // The height of the appBar.
-                            appBar.preferredSize.height -
-                            // The height of the system status bar.
-                            mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandscape) transactionListContainer,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (
-                              // The full height of the device screen.
-                              mediaQuery.size.height -
-                                  // The height of the appBar.
-                                  appBar.preferredSize.height -
-                                  // The height of the system status bar.
-                                  mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : transactionListContainer,
-          ],
-        ),
-      ),
-      floatingActionButton: Platform.isIOS
-          ? Container() // Render nothing on IOS Platform.
-          : FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => _startAddNewTransaction(context),
+
+    final pageBody = SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (isLandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Show Chart'),
+                // the adaptive constructor takes the same configuration as the
+                // normal Switch but the difference here is that is automatically
+                // adjusts the look based on the platform.
+                Switch.adaptive(
+                  // You might want to keep the general color theme.
+                  activeColor: Theme.of(context).accentColor,
+                  value: _showChart,
+                  onChanged: (value) => setState(() => _showChart = value),
+                )
+              ],
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          if (!isLandscape)
+            Container(
+              height: (
+                      // The full height of the device screen.
+                      mediaQuery.size.height -
+                          // The height of the appBar.
+                          appBar.preferredSize.height -
+                          // The height of the system status bar.
+                          mediaQuery.padding.top) *
+                  0.3,
+              child: Chart(_recentTransactions),
+            ),
+          if (!isLandscape) transactionListContainer,
+          if (isLandscape)
+            _showChart
+                ? Container(
+                    height: (
+                            // The full height of the device screen.
+                            mediaQuery.size.height -
+                                // The height of the appBar.
+                                appBar.preferredSize.height -
+                                // The height of the system status bar.
+                                mediaQuery.padding.top) *
+                        0.7,
+                    child: Chart(_recentTransactions),
+                  )
+                : transactionListContainer,
+        ],
+      ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageBody,
+            floatingActionButton: Platform.isIOS
+                ? Container() // Render nothing on IOS Platform.
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _startAddNewTransaction(context),
+                  ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
