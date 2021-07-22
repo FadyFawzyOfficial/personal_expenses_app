@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'models/transaction.dart';
@@ -150,7 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Show Chart'),
-                  Switch(
+                  // the adaptive constructor takes the same configuration as the
+                  // normal Switch but the difference here is that is automatically
+                  // adjusts the look based on the platform.
+                  Switch.adaptive(
+                    // You might want to keep the general color theme.
+                    activeColor: Theme.of(context).accentColor,
                     value: _showChart,
                     onChanged: (value) => setState(() => _showChart = value),
                   )
@@ -186,10 +193,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _startAddNewTransaction(context),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container() // Render nothing on IOS Platform.
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _startAddNewTransaction(context),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
