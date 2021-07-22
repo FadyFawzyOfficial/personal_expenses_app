@@ -159,54 +159,59 @@ class _MyHomePageState extends State<MyHomePage> {
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
 
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Show Chart'),
-                // the adaptive constructor takes the same configuration as the
-                // normal Switch but the difference here is that is automatically
-                // adjusts the look based on the platform.
-                Switch.adaptive(
-                  // You might want to keep the general color theme.
-                  activeColor: Theme.of(context).accentColor,
-                  value: _showChart,
-                  onChanged: (value) => setState(() => _showChart = value),
-                )
-              ],
-            ),
-          if (!isLandscape)
-            Container(
-              height: (
-                      // The full height of the device screen.
-                      mediaQuery.size.height -
-                          // The height of the appBar.
-                          appBar.preferredSize.height -
-                          // The height of the system status bar.
-                          mediaQuery.padding.top) *
-                  0.3,
-              child: Chart(_recentTransactions),
-            ),
-          if (!isLandscape) transactionListContainer,
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: (
-                            // The full height of the device screen.
-                            mediaQuery.size.height -
-                                // The height of the appBar.
-                                appBar.preferredSize.height -
-                                // The height of the system status bar.
-                                mediaQuery.padding.top) *
-                        0.7,
-                    child: Chart(_recentTransactions),
+    // SafeArea makes sure that everything is positioned within the boundaries
+    // or moved down a bit, moved up a bit so that we respect these reserved
+    // areas on the screen (top or bottom notch)
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  // the adaptive constructor takes the same configuration as the
+                  // normal Switch but the difference here is that is automatically
+                  // adjusts the look based on the platform.
+                  Switch.adaptive(
+                    // You might want to keep the general color theme.
+                    activeColor: Theme.of(context).accentColor,
+                    value: _showChart,
+                    onChanged: (value) => setState(() => _showChart = value),
                   )
-                : transactionListContainer,
-        ],
+                ],
+              ),
+            if (!isLandscape)
+              Container(
+                height: (
+                        // The full height of the device screen.
+                        mediaQuery.size.height -
+                            // The height of the appBar.
+                            appBar.preferredSize.height -
+                            // The height of the system status bar.
+                            mediaQuery.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandscape) transactionListContainer,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (
+                              // The full height of the device screen.
+                              mediaQuery.size.height -
+                                  // The height of the appBar.
+                                  appBar.preferredSize.height -
+                                  // The height of the system status bar.
+                                  mediaQuery.padding.top) *
+                          0.7,
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionListContainer,
+          ],
+        ),
       ),
     );
 
