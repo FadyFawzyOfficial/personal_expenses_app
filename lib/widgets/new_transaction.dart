@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -100,11 +99,9 @@ class _NewTransactionState extends State<NewTransaction> {
                 ],
               ),
               SizedBox(height: 16),
-              RaisedButton(
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).textTheme.button.color,
-                child: Text('Add Transaction'),
+              ElevatedButton(
                 onPressed: _submitTransaction,
+                child: Text('Add Transaction'),
               ),
             ],
           ),

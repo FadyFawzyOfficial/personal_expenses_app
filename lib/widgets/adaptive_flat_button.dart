@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AdaptiveFlatButton extends StatelessWidget {
   final String text;
@@ -18,12 +18,11 @@ class AdaptiveFlatButton extends StatelessWidget {
           ),
           onPressed: function,
         )
-      : FlatButton(
+      : TextButton(
+          onPressed: function,
           child: Text(
             text,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          textColor: Theme.of(context).primaryColor,
-          onPressed: function,
         );
 }

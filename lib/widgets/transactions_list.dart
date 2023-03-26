@@ -62,18 +62,20 @@ class TransactionList extends StatelessWidget {
                   // When we have more width, I want to show a button with a text
                   // next to it.
                   trailing: MediaQuery.of(context).size.width > 450
-                      ? FlatButton.icon(
+                      ? TextButton.icon(
+                          onPressed: () => deleteTransaction(transaction.id),
                           icon: Icon(Icons.delete_rounded),
                           label: Text('Delete'),
-                          textColor: Theme.of(context).errorColor,
-                          onPressed: () => deleteTransaction(transaction.id),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Theme.of(context).errorColor,
+                          ),
                         )
                       : IconButton(
+                          onPressed: () => deleteTransaction(transaction.id),
                           icon: Icon(
                             Icons.delete_rounded,
                             color: Theme.of(context).errorColor,
                           ),
-                          onPressed: () => deleteTransaction(transaction.id),
                         ),
                 ),
               );
