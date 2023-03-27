@@ -6,7 +6,7 @@ import 'adaptive_flat_button.dart';
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
 
-  NewTransaction(this.addNewTransaction);
+  const NewTransaction(this.addNewTransaction);
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
@@ -73,16 +73,16 @@ class _NewTransactionState extends State<NewTransaction> {
             children: [
               TextField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 onSubmitted: (_) => _submitTransaction(),
               ),
               TextField(
                 controller: _amountController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 onSubmitted: (_) => _submitTransaction(),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -98,10 +98,10 @@ class _NewTransactionState extends State<NewTransaction> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitTransaction,
-                child: Text('Add Transaction'),
+                child: const Text('Add Transaction'),
               ),
             ],
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../models/transaction.dart';
 
@@ -20,7 +20,7 @@ class TransactionList extends StatelessWidget {
                   'No transactions added yet!',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   height: constraints.maxHeight * 0.6,
                   child: Image.asset(
@@ -65,8 +65,8 @@ class TransactionList extends StatelessWidget {
                   trailing: MediaQuery.of(context).size.width > 450
                       ? TextButton.icon(
                           onPressed: () => deleteTransaction(transaction.id),
-                          icon: Icon(Icons.delete_rounded),
-                          label: Text('Delete'),
+                          icon: const Icon(Icons.delete_rounded),
+                          label: const Text('Delete'),
                           style: TextButton.styleFrom(
                             foregroundColor: Theme.of(context).errorColor,
                           ),

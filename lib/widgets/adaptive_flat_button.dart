@@ -14,7 +14,7 @@ class AdaptiveFlatButton extends StatelessWidget {
       ? CupertinoButton(
           child: Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           onPressed: function,
         )
@@ -22,7 +22,7 @@ class AdaptiveFlatButton extends StatelessWidget {
           onPressed: function,
           child: Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         );
 }
