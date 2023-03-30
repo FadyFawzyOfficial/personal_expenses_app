@@ -98,30 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
       )
       .toList();
 
-  void _addNewTransaction(String title, double amount, DateTime date) {
-    final newTransaction = Transaction(
-      id: DateTime.now().toString(),
-      title: title,
-      amount: amount,
-      date: date,
-    );
-
-    setState(() => _userTransactions.add(newTransaction));
-  }
-
-  void _deleteTransaction(String id) => setState(() =>
-      _userTransactions.removeWhere((transaction) => transaction.id == id));
-
-  void _startAddNewTransaction(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      // this will allow the bottom sheet to take the full required height which
-      // gives more insurance that TextField is not covered by the keyboard.
-      isScrollControlled: true,
-      builder: (_) => NewTransaction(_addNewTransaction),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     print('build() MyHomePageState');
@@ -173,51 +149,17 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Show Chart',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  // the adaptive constructor takes the same configuration as the
-                  // normal Switch but the difference here is that is automatically
-                  // adjusts the look based on the platform.
-                  Switch.adaptive(
-                    // You might want to keep the general color theme.
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (value) => setState(() => _showChart = value),
-                  )
-                ],
+              ..._buildPortraitContent(
+                mediaQuery,
+                appBar,
+                transactionListContainer,
               ),
             if (!isLandscape)
-              Container(
-                height: (
-                        // The full height of the device screen.
-                        mediaQuery.size.height -
-                            // The height of the appBar.
-                            appBar.preferredSize.height -
-                            // The height of the system status bar.
-                            mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransactions),
+              ..._buildLandscapeContent(
+                mediaQuery,
+                appBar,
+                transactionListContainer,
               ),
-            if (!isLandscape) transactionListContainer,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (
-                              // The full height of the device screen.
-                              mediaQuery.size.height -
-                                  // The height of the appBar.
-                                  appBar.preferredSize.height -
-                                  // The height of the system status bar.
-                                  mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : transactionListContainer,
           ],
         ),
       ),
@@ -240,5 +182,90 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
           );
+  }
+
+  List<Widget> _buildPortraitContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget transactionListContainer,
+  ) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Show Chart',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          // the adaptive constructor takes the same configuration as the
+          // normal Switch but the difference here is that is automatically
+          // adjusts the look based on the platform.
+          Switch.adaptive(
+            // You might want to keep the general color theme.
+            activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: (value) => setState(() => _showChart = value),
+          )
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (
+                      // The full height of the device screen.
+                      mediaQuery.size.height -
+                          // The height of the appBar.
+                          appBar.preferredSize.height -
+                          // The height of the system status bar.
+                          mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(_recentTransactions),
+            )
+          : transactionListContainer,
+    ];
+  }
+
+  List<Widget> _buildLandscapeContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget transactionListContainer,
+  ) {
+    return [
+      Container(
+        height: (
+                // The full height of the device screen.
+                mediaQuery.size.height -
+                    // The height of the appBar.
+                    appBar.preferredSize.height -
+                    // The height of the system status bar.
+                    mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      transactionListContainer,
+    ];
+  }
+
+  void _addNewTransaction(String title, double amount, DateTime date) {
+    final newTransaction = Transaction(
+      id: DateTime.now().toString(),
+      title: title,
+      amount: amount,
+      date: date,
+    );
+
+    setState(() => _userTransactions.add(newTransaction));
+  }
+
+  void _deleteTransaction(String id) => setState(() =>
+      _userTransactions.removeWhere((transaction) => transaction.id == id));
+
+  void _startAddNewTransaction(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      // this will allow the bottom sheet to take the full required height which
+      // gives more insurance that TextField is not covered by the keyboard.
+      isScrollControlled: true,
+      builder: (_) => NewTransaction(_addNewTransaction),
+    );
   }
 }
