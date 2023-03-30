@@ -103,34 +103,8 @@ class _MyHomePageState extends State<MyHomePage> {
     print('build() MyHomePageState');
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    // Because of declaring the appBar as a final variable here, I can no access
-    // anywhere since it's stored in that variable, has information about the
-    // height of the appBar.
-    final PreferredSizeWidget appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: const Text('Personal Expenses'),
-            trailing: Row(
-              // MainAxisSize. By default, it takes all the width it can get as
-              // a row (same for the column), the the row will shrink along its
-              // main axis,to be only as big as its children need to be.
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  child: const Icon(CupertinoIcons.add),
-                  onTap: () => _startAddNewTransaction(context),
-                ),
-              ],
-            ),
-          )
-        : AppBar(
-            title: const Text('Personal Expenses'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              ),
-            ],
-          );
+
+    final PreferredSizeWidget appBar = _buildAdaptiveAppBar();
 
     final transactionListContainer = Container(
       height: (mediaQuery.size.height -
@@ -184,9 +158,34 @@ class _MyHomePageState extends State<MyHomePage> {
           );
   }
 
+  PreferredSizeWidget _buildAdaptiveAppBar() {
+    return Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: const Text('Personal Expenses'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: const Icon(CupertinoIcons.add),
+                  onTap: () => _startAddNewTransaction(context),
+                ),
+              ],
+            ),
+          )
+        : AppBar(
+            title: const Text('Personal Expenses'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () => _startAddNewTransaction(context),
+              ),
+            ],
+          );
+  }
+
   List<Widget> _buildPortraitContent(
     MediaQueryData mediaQuery,
-    AppBar appBar,
+    PreferredSizeWidget appBar,
     Widget transactionListContainer,
   ) {
     return [
@@ -226,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> _buildLandscapeContent(
     MediaQueryData mediaQuery,
-    AppBar appBar,
+    PreferredSizeWidget appBar,
     Widget transactionListContainer,
   ) {
     return [
