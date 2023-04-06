@@ -10,9 +10,10 @@ class TransactionItem extends StatefulWidget {
   final Function deleteTransaction;
 
   const TransactionItem({
+    Key key,
     @required this.transaction,
     @required this.deleteTransaction,
-  });
+  }) : super(key: key);
 
   @override
   State<TransactionItem> createState() => _TransactionItemState();
